@@ -38,7 +38,6 @@ function render() {
     addCard.onclick = toggleMenu;
     container.appendChild(addCard);
     
-    // Layout anwenden
     const savedCols = localStorage.getItem('layoutCols') || 2;
     setLayout(savedCols);
 }
