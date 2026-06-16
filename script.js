@@ -11,83 +11,44 @@ let initialData = [
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"}
 ];
 
-// Automatische Prüfung: Wenn weniger als 10 Karten gespeichert sind, lade die Startliste neu
-let data;
-let savedData = JSON.parse(localStorage.getItem('myEntries_v4'));
+let data = JSON.parse(localStorage.getItem('myEntries_v6')) || initialData;
 
-if (!savedData || savedData.length < 10) {
-    data = initialData;
-    localStorage.setItem('myEntries_v4', JSON.stringify(data));
-} else {
-    data = savedData;
+function setLayout(cols) {
+    document.getElementById('container').style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    localStorage.setItem('layoutCols', cols);
 }
 
 function render() {
     const container = document.getElementById('container');
     container.innerHTML = '';
-    
-    // Sortierung nach Klicks
-    data.sort((a, b) => (localStorage.getItem(a.id + '_c') || 0) < (localStorage.getItem(b.id + '_c') || 0) ? 1 : -1);
-
     data.forEach(item => {
-        const clicks = localStorage.getItem(item.id + '_c') || 0;
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-            <button class="delete-btn" onclick="deleteEntry('${item.id}')">X</button>
-            <img src="${item.img}" alt="${item.name}" onclick="openLightbox('${item.img}')">
+            <img src="${item.img}" onclick="openLightbox('${item.img}')">
             <h3>${item.name}</h3>
-            <p>Aufrufe: ${clicks}</p>
-            <a href="${item.link}" target="_blank" class="btn" onclick="addClick('${item.id}')">Öffnen</a>
+            <a href="${item.link}" target="_blank" class="btn">Öffnen</a>
         `;
         container.appendChild(card);
     });
-
     const addCard = document.createElement('div');
     addCard.className = 'add-card';
-    addCard.innerHTML = `<div class="plus-icon">+</div><p>Neu</p>`;
+    addCard.innerHTML = `<div>+</div>`;
     addCard.onclick = toggleMenu;
     container.appendChild(addCard);
+    
+    // Layout wiederherstellen
+    const savedCols = localStorage.getItem('layoutCols') || 2;
+    setLayout(savedCols);
 }
 
-function openLightbox(src) {
-    document.getElementById('lightbox-img').src = src;
-    document.getElementById('lightbox').style.display = 'flex';
-}
-
-function closeLightbox() {
-    document.getElementById('lightbox').style.display = 'none';
-}
-
-function toggleMenu() {
-    const menu = document.getElementById('admin-menu');
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
-
+function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').style.display = 'flex'; }
+function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+function toggleMenu() { document.getElementById('admin-menu').style.display = document.getElementById('admin-menu').style.display === 'block' ? 'none' : 'block'; }
 function addEntry() {
-    const name = document.getElementById('name').value;
-    const link = document.getElementById('link').value;
-    const img = document.getElementById('img').value;
-    if(name && link && img) {
-        data.push({id: 'p' + Date.now(), name, link, img});
-        localStorage.setItem('myEntries_v4', JSON.stringify(data));
-        render();
-        toggleMenu();
-    }
+    const name = document.getElementById('name').value, link = document.getElementById('link').value, img = document.getElementById('img').value;
+    data.push({id: 'p'+Date.now(), name, link, img});
+    localStorage.setItem('myEntries_v6', JSON.stringify(data));
+    render(); toggleMenu();
 }
-
-function deleteEntry(id) {
-    if(confirm("Löschen?")) {
-        data = data.filter(item => item.id !== id);
-        localStorage.setItem('myEntries_v4', JSON.stringify(data));
-        render();
-    }
-}
-
-function addClick(id) {
-    let count = parseInt(localStorage.getItem(id + '_c') || 0);
-    localStorage.setItem(id + '_c', count + 1);
-    setTimeout(render, 100);
-}
-
 render();
