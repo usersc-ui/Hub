@@ -11,7 +11,7 @@ let initialData = [
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"}
 ];
 
-let data = JSON.parse(localStorage.getItem('myEntries_v6')) || initialData;
+let data = JSON.parse(localStorage.getItem('myEntries_v7')) || initialData;
 
 function setLayout(cols) {
     document.getElementById('container').style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
@@ -31,13 +31,14 @@ function render() {
         `;
         container.appendChild(card);
     });
+    
     const addCard = document.createElement('div');
     addCard.className = 'add-card';
     addCard.innerHTML = `<div>+</div>`;
     addCard.onclick = toggleMenu;
     container.appendChild(addCard);
     
-    // Layout wiederherstellen
+    // Layout anwenden
     const savedCols = localStorage.getItem('layoutCols') || 2;
     setLayout(savedCols);
 }
@@ -47,8 +48,10 @@ function closeLightbox() { document.getElementById('lightbox').style.display = '
 function toggleMenu() { document.getElementById('admin-menu').style.display = document.getElementById('admin-menu').style.display === 'block' ? 'none' : 'block'; }
 function addEntry() {
     const name = document.getElementById('name').value, link = document.getElementById('link').value, img = document.getElementById('img').value;
-    data.push({id: 'p'+Date.now(), name, link, img});
-    localStorage.setItem('myEntries_v6', JSON.stringify(data));
-    render(); toggleMenu();
+    if(name && link && img) {
+        data.push({id: 'p'+Date.now(), name, link, img});
+        localStorage.setItem('myEntries_v7', JSON.stringify(data));
+        render(); toggleMenu();
+    }
 }
 render();
