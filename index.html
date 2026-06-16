@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meine Favoriten</title>
-    <link rel="stylesheet" href="style.css?v=1.1">
+    <link rel="stylesheet" href="style.css?v=1.2">
 </head>
 <body>
+
+    <div class="controls">
+        <button onclick="setLayout(1)">1 Spalte</button>
+        <button onclick="setLayout(2)">2 Spalten</button>
+        <button onclick="setLayout(3)">3 Spalten</button>
+    </div>
+
     <div class="grid" id="container"></div>
 
     <div id="lightbox" onclick="closeLightbox()">
@@ -23,6 +30,6 @@
         <button onclick="toggleMenu()" class="cancel-btn">Abbrechen</button>
     </div>
 
-    <script src="script.js?v=1.1"></script>
+    <script src="script.js?v=1.2"></script>
 </body>
 </html>
