@@ -11,23 +11,14 @@ const initialData = [
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"}
 ];
 
-// Speicher leeren, damit keine alten Fehlerdaten hängen bleiben
-localStorage.removeItem('myEntries'); 
-let data = initialData;
-
-function render() {
-    const container = document.getElementById('container');
-    container.innerHTML = '';
-    
-    data.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            <img src="${item.img}">
-            <h3>${item.name}</h3>
-            <a href="${item.link}" target="_blank" class="btn">Öffnen</a>
-        `;
-        container.appendChild(card);
-    });
-}
-render();
+const container = document.getElementById('container');
+initialData.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+        <img src="${item.img}">
+        <h3>${item.name}</h3>
+        <a href="${item.link}" target="_blank" class="btn">Öffnen</a>
+    `;
+    container.appendChild(card);
+});
