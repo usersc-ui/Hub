@@ -1,4 +1,4 @@
-let data = JSON.parse(localStorage.getItem('myEntries_final')) || [
+const initialData = [
     {id: "p1", name: "annaplusone", link: "https://mega.nz/folder/m0Jw2DhA#Jv9qh5hRprdYVsuvXJBbkQ", img: "https://i.imgur.com/w1Iz6nB.jpeg"},
     {id: "p2", name: "cheekymz", link: "https://mega.nz/folder/WFlmiLaS#baeU7J8RoJK175BXNu7K3Q", img: "https://i.imgur.com/wuBA3bh.jpeg"},
     {id: "p3", name: "UrFavBellaBby", link: "https://mega.nz/folder/QjEGkKgY#B1xbO-2J95onN_qosU7DWw", img: "https://i.imgur.com/TYdDLj0.jpeg"},
@@ -11,22 +11,20 @@ let data = JSON.parse(localStorage.getItem('myEntries_final')) || [
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"}
 ];
 
+let data = JSON.parse(localStorage.getItem('myEntries')) || initialData;
+
 function render() {
     const container = document.getElementById('container');
     container.innerHTML = '';
     
-    data.sort((a, b) => (localStorage.getItem(b.id + '_c') || 0) - (localStorage.getItem(a.id + '_c') || 0));
-
     data.forEach(item => {
-        const clicks = localStorage.getItem(item.id + '_c') || 0;
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
             <button class="delete-btn" onclick="deleteEntry('${item.id}')">X</button>
             <img src="${item.img}" onclick="openLightbox('${item.img}')">
             <h3>${item.name}</h3>
-            <p>Aufrufe: ${clicks}</p>
-            <a href="${item.link}" target="_blank" class="btn" onclick="addClick('${item.id}')">Öffnen</a>
+            <a href="${item.link}" target="_blank" class="btn">Öffnen</a>
         `;
         container.appendChild(card);
     });
@@ -38,15 +36,9 @@ function render() {
     container.appendChild(addCard);
 }
 
-function addClick(id) {
-    let count = parseInt(localStorage.getItem(id + '_c') || 0);
-    localStorage.setItem(id + '_c', count + 1);
-    render();
-}
-
 function deleteEntry(id) {
     data = data.filter(item => item.id !== id);
-    localStorage.setItem('myEntries_final', JSON.stringify(data));
+    localStorage.setItem('myEntries', JSON.stringify(data));
     render();
 }
 
@@ -57,7 +49,7 @@ function addEntry() {
     const name = document.getElementById('name').value, link = document.getElementById('link').value, img = document.getElementById('img').value;
     if(name && link && img) {
         data.push({id: 'p'+Date.now(), name, link, img});
-        localStorage.setItem('myEntries_final', JSON.stringify(data));
+        localStorage.setItem('myEntries', JSON.stringify(data));
         render(); toggleMenu();
     }
 }
