@@ -12,6 +12,8 @@ const initialData = [
 ];
 
 const container = document.getElementById('container');
+container.innerHTML = ''; // Vorher leeren
+
 initialData.forEach(item => {
     const card = document.createElement('div');
     card.className = 'card';
