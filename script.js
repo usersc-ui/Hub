@@ -11,16 +11,22 @@ let initialData = [
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"}
 ];
 
-// Speicher-Name auf v2 geändert, damit die 10 Karten neu geladen werden
-let data = JSON.parse(localStorage.getItem('myEntries_v3'));
-if (!data || data.length === 0) {
+// Automatische Prüfung: Wenn weniger als 10 Karten gespeichert sind, lade die Startliste neu
+let data;
+let savedData = JSON.parse(localStorage.getItem('myEntries_v4'));
+
+if (!savedData || savedData.length < 10) {
     data = initialData;
-    localStorage.setItem('myEntries_v2', JSON.stringify(data));
+    localStorage.setItem('myEntries_v4', JSON.stringify(data));
+} else {
+    data = savedData;
 }
 
 function render() {
     const container = document.getElementById('container');
     container.innerHTML = '';
+    
+    // Sortierung nach Klicks
     data.sort((a, b) => (localStorage.getItem(a.id + '_c') || 0) < (localStorage.getItem(b.id + '_c') || 0) ? 1 : -1);
 
     data.forEach(item => {
@@ -49,22 +55,31 @@ function openLightbox(src) {
     document.getElementById('lightbox').style.display = 'flex';
 }
 
-function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-function toggleMenu() { document.getElementById('admin-menu').style.display = document.getElementById('admin-menu').style.display === 'block' ? 'none' : 'block'; }
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+}
+
+function toggleMenu() {
+    const menu = document.getElementById('admin-menu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
 
 function addEntry() {
-    const name = document.getElementById('name').value, link = document.getElementById('link').value, img = document.getElementById('img').value;
+    const name = document.getElementById('name').value;
+    const link = document.getElementById('link').value;
+    const img = document.getElementById('img').value;
     if(name && link && img) {
-        data.push({id: 'p'+Date.now(), name, link, img});
-        localStorage.setItem('myEntries_v2', JSON.stringify(data));
-        render(); toggleMenu();
+        data.push({id: 'p' + Date.now(), name, link, img});
+        localStorage.setItem('myEntries_v4', JSON.stringify(data));
+        render();
+        toggleMenu();
     }
 }
 
 function deleteEntry(id) {
     if(confirm("Löschen?")) {
         data = data.filter(item => item.id !== id);
-        localStorage.setItem('myEntries_v2', JSON.stringify(data));
+        localStorage.setItem('myEntries_v4', JSON.stringify(data));
         render();
     }
 }
