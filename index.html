@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meine Favoriten</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="grid" id="container"></div>
+
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Vollbild">
+    </div>
+
+    <div id="admin-menu">
+        <h3>Neuen Eintrag hinzufügen</h3>
+        <input type="text" id="name" placeholder="Name">
+        <input type="text" id="link" placeholder="Mega-Link">
+        <input type="text" id="img" placeholder="Bild-URL">
+        <br>
+        <button onclick="addEntry()" class="save-btn">Speichern</button>
+        <button onclick="toggleMenu()" class="cancel-btn">Abbrechen</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
