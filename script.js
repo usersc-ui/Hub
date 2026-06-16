@@ -1,4 +1,4 @@
-let initialData = [
+let data = JSON.parse(localStorage.getItem('myEntries_final')) || [
     {id: "p1", name: "annaplusone", link: "https://mega.nz/folder/m0Jw2DhA#Jv9qh5hRprdYVsuvXJBbkQ", img: "https://i.imgur.com/w1Iz6nB.jpeg"},
     {id: "p2", name: "cheekymz", link: "https://mega.nz/folder/WFlmiLaS#baeU7J8RoJK175BXNu7K3Q", img: "https://i.imgur.com/wuBA3bh.jpeg"},
     {id: "p3", name: "UrFavBellaBby", link: "https://mega.nz/folder/QjEGkKgY#B1xbO-2J95onN_qosU7DWw", img: "https://i.imgur.com/TYdDLj0.jpeg"},
@@ -11,25 +11,11 @@ let initialData = [
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"}
 ];
 
-// Lade Daten aus dem Speicher (mit v11 ID, um alten Cache zu erzwingen)
-let data = JSON.parse(localStorage.getItem('myEntries_v11'));
-
-// Falls keine Daten da sind oder die Liste zu kurz ist: Überschreibe mit initialData
-if (!data || data.length < 10) {
-    data = initialData;
-    localStorage.setItem('myEntries_v11', JSON.stringify(data));
-}
-
 function render() {
     const container = document.getElementById('container');
     container.innerHTML = '';
-
-    // Sortierung: Karte mit den meisten Aufrufen nach oben
-    data.sort((a, b) => {
-        let clicksA = parseInt(localStorage.getItem(a.id + '_c') || 0);
-        let clicksB = parseInt(localStorage.getItem(b.id + '_c') || 0);
-        return clicksB - clicksA;
-    });
+    
+    data.sort((a, b) => (localStorage.getItem(b.id + '_c') || 0) - (localStorage.getItem(a.id + '_c') || 0));
 
     data.forEach(item => {
         const clicks = localStorage.getItem(item.id + '_c') || 0;
@@ -55,47 +41,24 @@ function render() {
 function addClick(id) {
     let count = parseInt(localStorage.getItem(id + '_c') || 0);
     localStorage.setItem(id + '_c', count + 1);
-    // Render neu aufrufen, damit sich die Reihenfolge sofort aktualisiert
     render();
 }
 
 function deleteEntry(id) {
-    if(confirm("Wirklich löschen?")) {
-        data = data.filter(item => item.id !== id);
-        localStorage.setItem('myEntries_v11', JSON.stringify(data));
-        render();
-    }
+    data = data.filter(item => item.id !== id);
+    localStorage.setItem('myEntries_final', JSON.stringify(data));
+    render();
 }
 
-function toggleMenu() { 
-    let menu = document.getElementById('admin-menu');
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; 
-}
-
-function openLightbox(src) { 
-    document.getElementById('lightbox-img').src = src; 
-    document.getElementById('lightbox').style.display = 'flex'; 
-}
-
-function closeLightbox() { 
-    document.getElementById('lightbox').style.display = 'none'; 
-}
-
+function toggleMenu() { document.getElementById('admin-menu').style.display = document.getElementById('admin-menu').style.display === 'block' ? 'none' : 'block'; }
+function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').style.display = 'flex'; }
+function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
 function addEntry() {
-    const name = document.getElementById('name').value;
-    const link = document.getElementById('link').value;
-    const img = document.getElementById('img').value;
+    const name = document.getElementById('name').value, link = document.getElementById('link').value, img = document.getElementById('img').value;
     if(name && link && img) {
         data.push({id: 'p'+Date.now(), name, link, img});
-        localStorage.setItem('myEntries_v11', JSON.stringify(data));
-        render(); 
-        toggleMenu();
-        // Input Felder leeren
-        document.getElementById('name').value = '';
-        document.getElementById('link').value = '';
-        document.getElementById('img').value = '';
+        localStorage.setItem('myEntries_final', JSON.stringify(data));
+        render(); toggleMenu();
     }
 }
-
-// Initialer Aufruf
 render();
