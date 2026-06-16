@@ -11,19 +11,20 @@ let initialData = [
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"}
 ];
 
-let data = JSON.parse(localStorage.getItem('myEntries'));
+// Speicher-Name auf v2 geändert, damit die 10 Karten neu geladen werden
+let data = JSON.parse(localStorage.getItem('myEntries_v2'));
 if (!data || data.length === 0) {
     data = initialData;
-    localStorage.setItem('myEntries', JSON.stringify(data));
+    localStorage.setItem('myEntries_v2', JSON.stringify(data));
 }
 
 function render() {
     const container = document.getElementById('container');
     container.innerHTML = '';
-    data.sort((a, b) => (localStorage.getItem(a.id + '_clicks') || 0) < (localStorage.getItem(b.id + '_clicks') || 0) ? 1 : -1);
+    data.sort((a, b) => (localStorage.getItem(a.id + '_c') || 0) < (localStorage.getItem(b.id + '_c') || 0) ? 1 : -1);
 
     data.forEach(item => {
-        const clicks = localStorage.getItem(item.id + '_clicks') || 0;
+        const clicks = localStorage.getItem(item.id + '_c') || 0;
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
@@ -38,50 +39,39 @@ function render() {
 
     const addCard = document.createElement('div');
     addCard.className = 'add-card';
-    addCard.innerHTML = `<div class="plus-icon">+</div><p>Neu hinzufügen</p>`;
+    addCard.innerHTML = `<div class="plus-icon">+</div><p>Neu</p>`;
     addCard.onclick = toggleMenu;
     container.appendChild(addCard);
 }
 
-function openLightbox(imgSrc) {
-    document.getElementById('lightbox-img').src = imgSrc;
+function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
     document.getElementById('lightbox').style.display = 'flex';
 }
 
-function closeLightbox() {
-    document.getElementById('lightbox').style.display = 'none';
-}
-
-function toggleMenu() {
-    const menu = document.getElementById('admin-menu');
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
+function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+function toggleMenu() { document.getElementById('admin-menu').style.display = document.getElementById('admin-menu').style.display === 'block' ? 'none' : 'block'; }
 
 function addEntry() {
-    const name = document.getElementById('name').value;
-    const link = document.getElementById('link').value;
-    const img = document.getElementById('img').value;
+    const name = document.getElementById('name').value, link = document.getElementById('link').value, img = document.getElementById('img').value;
     if(name && link && img) {
-        const newId = 'p' + Date.now();
-        data.push({id: newId, name, link, img});
-        localStorage.setItem('myEntries', JSON.stringify(data));
-        render();
-        toggleMenu();
+        data.push({id: 'p'+Date.now(), name, link, img});
+        localStorage.setItem('myEntries_v2', JSON.stringify(data));
+        render(); toggleMenu();
     }
 }
 
 function deleteEntry(id) {
-    if(confirm("Wirklich löschen?")) {
+    if(confirm("Löschen?")) {
         data = data.filter(item => item.id !== id);
-        localStorage.setItem('myEntries', JSON.stringify(data));
-        localStorage.removeItem(id + '_clicks');
+        localStorage.setItem('myEntries_v2', JSON.stringify(data));
         render();
     }
 }
 
 function addClick(id) {
-    let count = parseInt(localStorage.getItem(id + '_clicks') || 0);
-    localStorage.setItem(id + '_clicks', count + 1);
+    let count = parseInt(localStorage.getItem(id + '_c') || 0);
+    localStorage.setItem(id + '_c', count + 1);
     setTimeout(render, 100);
 }
 
