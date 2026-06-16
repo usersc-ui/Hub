@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meine Favoriten</title>
-    <link rel="stylesheet" href="style.css?v=2.1">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="container" class="stack-container"></div>
 
     <div id="lightbox" onclick="closeLightbox()">
@@ -15,15 +14,14 @@
     </div>
 
     <div id="admin-menu">
-        <h3>Neuen Eintrag hinzufügen</h3>
+        <h3>Neuer Eintrag</h3>
         <input type="text" id="name" placeholder="Name">
-        <input type="text" id="link" placeholder="Mega-Link">
+        <input type="text" id="link" placeholder="Link">
         <input type="text" id="img" placeholder="Bild-URL">
-        <br>
-        <button onclick="addEntry()" class="save-btn">Speichern</button>
-        <button onclick="toggleMenu()" class="cancel-btn">Abbrechen</button>
+        <button onclick="addEntry()">Speichern</button>
+        <button onclick="toggleMenu()">Abbrechen</button>
     </div>
 
-    <script src="script.js?v=2.1"></script>
+    <script src="script.js"></script>
 </body>
 </html>
