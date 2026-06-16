@@ -11,7 +11,9 @@ const initialData = [
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"}
 ];
 
-let data = JSON.parse(localStorage.getItem('myEntries')) || initialData;
+// Speicher leeren, damit keine alten Fehlerdaten hängen bleiben
+localStorage.removeItem('myEntries'); 
+let data = initialData;
 
 function render() {
     const container = document.getElementById('container');
@@ -21,36 +23,11 @@ function render() {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-            <button class="delete-btn" onclick="deleteEntry('${item.id}')">X</button>
-            <img src="${item.img}" onclick="openLightbox('${item.img}')">
+            <img src="${item.img}">
             <h3>${item.name}</h3>
             <a href="${item.link}" target="_blank" class="btn">Öffnen</a>
         `;
         container.appendChild(card);
     });
-
-    const addCard = document.createElement('div');
-    addCard.className = 'add-card';
-    addCard.innerHTML = `<h3>+ Neu hinzufügen</h3>`;
-    addCard.onclick = toggleMenu;
-    container.appendChild(addCard);
-}
-
-function deleteEntry(id) {
-    data = data.filter(item => item.id !== id);
-    localStorage.setItem('myEntries', JSON.stringify(data));
-    render();
-}
-
-function toggleMenu() { document.getElementById('admin-menu').style.display = document.getElementById('admin-menu').style.display === 'block' ? 'none' : 'block'; }
-function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').style.display = 'flex'; }
-function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-function addEntry() {
-    const name = document.getElementById('name').value, link = document.getElementById('link').value, img = document.getElementById('img').value;
-    if(name && link && img) {
-        data.push({id: 'p'+Date.now(), name, link, img});
-        localStorage.setItem('myEntries', JSON.stringify(data));
-        render(); toggleMenu();
-    }
 }
 render();
