@@ -12,7 +12,7 @@ let initialData = [
 ];
 
 // Speicher-Name auf v2 geändert, damit die 10 Karten neu geladen werden
-let data = JSON.parse(localStorage.getItem('myEntries_v2'));
+let data = JSON.parse(localStorage.getItem('myEntries_v3'));
 if (!data || data.length === 0) {
     data = initialData;
     localStorage.setItem('myEntries_v2', JSON.stringify(data));
