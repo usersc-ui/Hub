@@ -1,5 +1,4 @@
 const initialData = [
-    {id: "p13", name: "jameliz", link: "https://mega.nz/folder/EAcnzAoD#W_ejnCmzPmcBktR2gtPOpQ", img: "https://i.imgur.com/0z0NIfl.jpeg"},
     {id: "p1", name: "annaplusone", link: "https://mega.nz/folder/m0Jw2DhA#Jv9qh5hRprdYVsuvXJBbkQ", img: "https://i.imgur.com/w1Iz6nB.jpeg"},
     {id: "p2", name: "cheekymz", link: "https://mega.nz/folder/WFlmiLaS#baeU7J8RoJK175BXNu7K3Q", img: "https://i.imgur.com/wuBA3bh.jpeg"},
     {id: "p3", name: "UrFavBellaBby", link: "https://mega.nz/folder/QjEGkKgY#B1xbO-2J95onN_qosU7DWw", img: "https://i.imgur.com/TYdDLj0.jpeg"},
@@ -11,7 +10,8 @@ const initialData = [
     {id: "p9", name: "Comatozze", link: "https://mega.nz/folder/hywlGJDY#dDp9Q3NFv_9cDkroIRlL4Q", img: "https://i.imgur.com/XZyrg68.jpeg"},
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"},
     {id: "p11", name: "creamyspot", link: "https://mega.nz/folder/FQtBHIoA#bMNIVyAAPrtlnorDC0JeJA", img: "https://i.imgur.com/gI0CfNC.jpeg"},
-    {id: "p12", name: "gabbyblessings", link: "https://mega.nz/folder/uCxzFRgJ#Opwp5C5UzHMzmmtz_c2q5A", img: "https://i.imgur.com/9MafsCv.png"}
+    {id: "p12", name: "gabbyblessings", link: "https://mega.nz/folder/uCxzFRgJ#Opwp5C5UzHMzmmtz_c2q5A", img: "https://i.imgur.com/9MafsCv.png"},
+    {id: "p13", name: "jameliz", link: "https://mega.nz/folder/EAcnzAoD#W_ejnCmzPmcBktR2gtPOpQ", img: "https://i.imgur.com/0z0NIfl.jpeg"}
 ];
 
 const container = document.getElementById('container');
