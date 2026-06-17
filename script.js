@@ -13,16 +13,21 @@ const initialData = [
     {id: "p12", name: "gabbyblessings", link: "https://mega.nz/folder/uCxzFRgJ#Opwp5C5UzHMzmmtz_c2q5A", img: "https://i.imgur.com/9MafsCv.png"}
 ];
 
-const container = document.getElementById('container');
-container.innerHTML = ''; // Vorher leeren
+// Dieser Teil sucht jetzt automatisch nach 'grid' ODER 'container'
+const container = document.querySelector('.grid') || document.getElementById('container');
 
-initialData.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-        <img src="${item.img}">
-        <h3>${item.name}</h3>
-        <a href="${item.link}" target="_blank" class="btn">Öffnen</a>
-    `;
-    container.appendChild(card);
-});
+if (container) {
+    container.innerHTML = ''; // Vorher leeren
+    initialData.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <img src="${item.img}">
+            <h3>${item.name}</h3>
+            <a href="${item.link}" target="_blank" class="btn">Öffnen</a>
+        `;
+        container.appendChild(card);
+    });
+} else {
+    console.error("Fehler: Weder .grid noch #container wurden in der HTML gefunden!");
+}
