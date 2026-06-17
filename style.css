@@ -5,7 +5,7 @@ body {
   animation: bgMove 12s ease infinite;
   color: white;
   margin: 0;
-  padding: 15px;
+  padding: 20px;
   min-height: 100vh;
 }
 
@@ -15,34 +15,47 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* SUCHBEREICH - MIT MEHR ABSTAND UND SCHICKEM GLOW */
+/* SUCHBEREICH: Extremer Abstand nach oben und unten */
 .search-section {
-  margin: 40px auto 40px auto; /* Deutlich mehr Abstand nach oben und unten */
+  margin: 60px auto 50px auto !important;
   text-align: center;
-  max-width: 400px;
-  padding: 0 15px;
+  max-width: 450px;
+  padding: 0 10px;
+  display: block;
 }
 
+/* DIE FIXIERTE RUNDE FORM (Erzwungen für Handys) */
 #searchInput {
-  width: 100%;
-  padding: 14px 22px;
-  border-radius: 25px;
-  border: 1px solid #444; /* Etwas hellerer Rand für mehr Tiefe */
-  background: rgba(35, 35, 35, 0.9); /* Edles Dunkelgrau passend zu den Karten */
-  color: white;
-  font-size: 16px;
-  outline: none;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  width: 100% !important;
+  padding: 16px 25px !important;
+  
+  /* Erzwingt die runde Form auf allen Geräten */
+  border-radius: 30px !important; 
+  -webkit-border-radius: 30px !important;
+  -moz-border-radius: 30px !important;
+  
+  /* Schaltet das hässliche Standard-Grau vom System aus */
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  
+  /* Farbe & Design wie deine lila Karten-Ränder */
+  border: 2px solid #333 !important; 
+  background-color: rgba(30, 30, 30, 0.9) !important;
+  color: #ffffff !important;
+  font-size: 17px !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7) !important;
 }
 
+/* Aktiver lila Leuchteffekt beim Tippen */
 #searchInput:focus {
-  border-color: #bb86fc;
-  box-shadow: 0 0 12px rgba(187, 134, 252, 0.4);
+  border-color: #bb86fc !important;
+  box-shadow: 0 0 15px rgba(187, 134, 252, 0.5) !important;
 }
 
-/* GRID & KARTEN */
+/* KARTEN GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
