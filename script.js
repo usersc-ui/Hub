@@ -2,7 +2,7 @@ const initialData = [
     {id: "p1", name: "annaplusone", link: "https://mega.nz/folder/m0Jw2DhA#Jv9qh5hRprdYVsuvXJBbkQ", img: "https://i.imgur.com/w1Iz6nB.jpeg"},
     {id: "p2", name: "cheekymz", link: "https://mega.nz/folder/WFlmiLaS#baeU7J8RoJK175BXNu7K3Q", img: "https://i.imgur.com/wuBA3bh.jpeg"},
     {id: "p3", name: "UrFavBellaBby", link: "https://mega.nz/folder/QjEGkKgY#B1xbO-2J95onN_qosU7DWw", img: "https://i.imgur.com/TYdDLj0.jpeg"},
-    {id: "p4", name: "alina_rose", link: "https://mega.nz/folder/WQlFBbgS#5Mak9tPNyO6Ta7htdd4yfg", img: "https://i.imgur.com/6aEoOaa.jpeg"},
+    {id: "p4", name: "alina_rose", link: "https://mega.nz/folder/WQlFBbgS#5Make9tPNyO6Ta7htdd4yfg", img: "https://i.imgur.com/6aEoOaa.jpeg"},
     {id: "p5", name: "brattygappy", link: "https://mega.nz/folder/g7kgWT7Y#ICDXShb9sBrjbggO8fF3JQ", img: "https://i.imgur.com/MwkX4qc.jpeg"},
     {id: "p6", name: "aaliyah yasin", link: "https://mega.nz/folder/xUFARK7B#mCvpc18rJYr171vOA9TKvg", img: "https://i.imgur.com/blV0wEK.jpeg"},
     {id: "p7", name: "annywalker", link: "https://mega.nz/folder/q9A1VQLQ#7MHvNUDfDEgkEB_CARrEJQ", img: "https://i.imgur.com/KG9wrc2.jpeg"},
@@ -17,10 +17,8 @@ const container = document.querySelector('.grid') || document.getElementById('co
 const searchInput = document.getElementById('searchInput');
 const historyContainer = document.getElementById('searchHistory');
 
-// Lade Verlauf aus dem Browser-Speicher oder starte leer
 let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
 
-// Funktion zum Anzeigen der Karten
 function renderCards(data) {
     if (!container) return;
     container.innerHTML = '';
@@ -34,6 +32,48 @@ function renderCards(data) {
         `;
         container.appendChild(card);
     });
+}
+
+function renderHistory() {
+    if (!historyContainer) return;
+    historyContainer.innerHTML = '';
+    
+    searchHistory.slice(-5).reverse().forEach(term => {
+        const tag = document.createElement('span');
+        tag.className = 'history-tag';
+        tag.textContent = term;
+        tag.addEventListener('click', () => {
+            searchInput.value = term;
+            filterModels(term);
+        });
+        historyContainer.appendChild(tag);
+    });
+}
+
+function filterModels(query) {
+    const filtered = initialData.filter(item => 
+        item.name.toLowerCase().includes(query.toLowerCase())
+    );
+    renderCards(filtered);
+}
+
+searchInput.addEventListener('input', (e) => {
+    filterModels(e.target.value);
+});
+
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        const value = searchInput.value.trim();
+        if (value && !searchHistory.includes(value)) {
+            searchHistory.push(value);
+            localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            renderHistory();
+        }
+    }
+});
+
+renderCards(initialData);
+renderHistory();
 }
 
 // Funktion zum Anzeigen des Suchverlaufs
