@@ -13,8 +13,47 @@ const initialData = [
     {id: "p12", name: "gabbyblessings", link: "https://mega.nz/folder/uCxzFRgJ#Opwp5C5UzHMzmmtz_c2q5A", img: "https://i.imgur.com/9MafsCv.png"}
 ];
 
-const container = document.querySelector('.grid');
+const container = document.getElementById('container');
 const searchInput = document.getElementById('searchInput');
+const menuToggle = document.getElementById('menuToggle');
+const dropdownMenu = document.getElementById('dropdownMenu');
+const favToggle = document.getElementById('favToggle');
+
+// Speicher für Favoriten-IDs aus dem Browser laden
+let favorites = JSON.parse(localStorage.getItem('modelFavorites')) || [];
+// Zustand des Toggles laden
+let showFavsOnTop = JSON.parse(localStorage.getItem('showFavsOnTop')) || false;
+
+// Setze den Schalter beim Start auf den gespeicherten Wert
+if (favToggle) {
+    favToggle.checked = showFavsOnTop;
+}
+
+// 2-Striche-Menü öffnen/schließen beim Drücken
+if (menuToggle && dropdownMenu) {
+    menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('show');
+    });
+
+    // Schließen, wenn man irgendwo anders hinklickt
+    document.addEventListener('click', () => {
+        dropdownMenu.classList.remove('show');
+    });
+    
+    dropdownMenu.addEventListener('click', (e) => {
+        e.stopPropagation(); // Verhindert Schließen beim Klicken im Menü
+    });
+}
+
+// Wenn man den Toggle umschaltet
+if (favToggle) {
+    favToggle.addEventListener('change', (e) => {
+        showFavsOnTop = e.target.checked;
+        localStorage.setItem('showFavsOnTop', JSON.stringify(showFavsOnTop));
+        applyFilterAndSort(); // Liste sofort neu ordnen!
+    });
+}
 
 function getEditDistance(a, b) {
     if (a.length === 0) return b.length;
@@ -38,55 +77,81 @@ function getEditDistance(a, b) {
     return matrix[b.length][a.length];
 }
 
+function toggleFavorite(id) {
+    if (favorites.includes(id)) {
+        favorites = favorites.filter(favId => favId !== id);
+    } else {
+        favorites.push(id);
+    }
+    localStorage.setItem('modelFavorites', JSON.stringify(favorites));
+    applyFilterAndSort(); // Karten aktualisieren
+}
+
 function renderCards(data) {
     if (!container) return;
     container.innerHTML = '';
+    
     data.forEach(item => {
+        const isFav = favorites.includes(item.id);
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
+            <span class="fav-star ${isFav ? 'active' : ''}" data-id="${item.id}">★</span>
             <img src="${item.img}">
             <h3>${item.name}</h3>
             <a href="${item.link}" target="_blank" class="btn">Öffnen</a>
         `;
+        
+        // Stern-Klick-Event verknüpfen
+        const star = card.querySelector('.fav-star');
+        star.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleFavorite(item.id);
+        });
+        
         container.appendChild(card);
     });
 }
 
-function filterModels(query) {
-    const cleanQuery = query.toLowerCase().trim();
-    
-    if (cleanQuery === '') {
-        renderCards(initialData);
-        return;
+function applyFilterAndSort() {
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    let currentList = [...initialData];
+
+    // 1. Falls gesucht wird, filtern
+    if (query !== '') {
+        const scoredData = initialData.map(item => {
+            const name = item.name.toLowerCase();
+            let score = 0;
+            if (name.includes(query)) {
+                score = 100;
+            } else {
+                const distance = getEditDistance(query, name);
+                score = 100 - (distance * 15);
+            }
+            return { item, score };
+        });
+
+        currentList = scoredData
+            .filter(entry => entry.score > 45)
+            .sort((a, b) => b.score - a.score)
+            .map(entry => entry.item);
     }
 
-    const scoredData = initialData.map(item => {
-        const name = item.name.toLowerCase();
-        let score = 0;
+    // 2. Falls der Favoriten-Toggle aktiv ist, Favoriten ganz nach oben sortieren
+    if (showFavsOnTop) {
+        currentList.sort((a, b) => {
+            const aIsFav = favorites.includes(a.id) ? 1 : 0;
+            const bIsFav = favorites.includes(b.id) ? 1 : 0;
+            return bIsFav - aIsFav; // Favoriten (1) kommen vor Nicht-Favoriten (0)
+        });
+    }
 
-        if (name.includes(cleanQuery)) {
-            score = 100;
-        } else {
-            const distance = getEditDistance(cleanQuery, name);
-            score = 100 - (distance * 15);
-        }
-
-        return { item, score };
-    });
-
-    const filtered = scoredData
-        .filter(entry => entry.score > 45)
-        .sort((a, b) => b.score - a.score)
-        .map(entry => entry.item);
-
-    renderCards(filtered);
+    renderCards(currentList);
 }
 
 if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-        filterModels(e.target.value);
-    });
+    searchInput.addEventListener('input', applyFilterAndSort);
 }
 
-renderCards(initialData);
+// Erstmaliger Start beim Laden der Seite
+applyFilterAndSort();
