@@ -15,6 +15,60 @@ body {
   100% { background-position: 0% 50%; }
 }
 
+/* SUCHBEREICH (Zentriert und farblich angepasst) */
+.search-section {
+  margin: 20px auto 30px auto;
+  text-align: center;
+  max-width: 400px;
+  padding: 0 15px;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: 1px solid #333;
+  background: rgba(30, 30, 30, 0.9);
+  color: white;
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+#searchInput:focus {
+  border-color: #bb86fc;
+  box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
+}
+
+/* ABSTAND UND DESIGN FÜR DIE VERLAUF-TAGS UNTER DER SUCHE */
+.history-container {
+  margin-top: 15px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.history-tag {
+  background: rgba(255, 255, 255, 0.08);
+  color: #bb86fc;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.history-tag:hover {
+  background: #bb86fc;
+  color: black;
+  border-color: #bb86fc;
+}
+
+/* KARTEN GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
