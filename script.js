@@ -13,7 +13,8 @@ const initialData = [
     {id: "p12", name: "gabbyblessings", link: "https://mega.nz/folder/uCxzFRgJ#Opwp5C5UzHMzmmtz_c2q5A", img: "https://i.imgur.com/9MafsCv.png"}
 ];
 
-const container = document.getElementById('container');
+// Greift jetzt wieder wie früher auf .container zu!
+const container = document.querySelector('.container');
 const searchInput = document.getElementById('searchInput');
 const historyContainer = document.getElementById('searchHistory');
 
@@ -119,6 +120,6 @@ if (searchInput) {
     });
 }
 
-// Start-Trigger beim Aufrufen der Seite
+// Jetzt werden die Karten beim Seitenaufruf wieder korrekt erzwungen!
 renderCards(initialData);
 renderHistory();
