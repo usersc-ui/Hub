@@ -15,41 +15,130 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* SUCHBEREICH: Extremer Abstand nach oben und unten */
-.search-section {
-  margin: 60px auto 50px auto !important;
-  text-align: center;
-  max-width: 450px;
-  padding: 0 10px;
+/* HEADER & DIE HALB DURCHSICHTIGEN 2 STRICHE */
+.header-bar {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 5px;
+  z-index: 200;
+}
+
+.menu-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 26px;
+  height: 10px; /* Perfekter Abstand für genau 2 Striche */
+  cursor: pointer;
+  opacity: 0.6; /* Hier: Wunderschön halb durchsichtig! */
+  transition: opacity 0.3s ease;
+}
+
+.menu-btn:hover {
+  opacity: 1; /* Wird voll sichtbar, wenn man drüber fährt oder drückt */
+}
+
+.menu-btn span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #ffffff; /* Strahlend weiß */
+  border-radius: 2px;
+}
+
+/* DAS ERWEITERTE MENÜ (DROPDOWN) */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 35px;
+  left: 5px;
+  background: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  min-width: 230px;
+}
+
+.dropdown-menu.show {
   display: block;
 }
 
-/* DIE FIXIERTE RUNDE FORM (Erzwungen für Handys) */
+/* DER TOGGLE-SCHALTER */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-text {
+  font-size: 14px;
+  color: #fff;
+  margin-left: 12px;
+}
+
+.toggle-container input {
+  display: none;
+}
+
+.slider {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background-color: #444;
+  border-radius: 22px;
+  transition: 0.3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background-color: #bb86fc;
+}
+
+input:checked + .slider:before {
+  transform: translateX(18px);
+}
+
+/* SUCHBEREICH */
+.search-section {
+  margin: 20px auto 40px auto !important;
+  text-align: center;
+  max-width: 450px;
+  padding: 0 10px;
+}
+
 #searchInput {
   width: 100% !important;
-  padding: 16px 25px !important;
-  
-  /* Erzwingt die runde Form auf allen Geräten */
-  border-radius: 30px !important; 
+  padding: 15px 25px !important;
+  border-radius: 30px !important;
   -webkit-border-radius: 30px !important;
-  -moz-border-radius: 30px !important;
-  
-  /* Schaltet das hässliche Standard-Grau vom System aus */
   -webkit-appearance: none !important;
-  -moz-appearance: none !important;
   appearance: none !important;
-  
-  /* Farbe & Design wie deine lila Karten-Ränder */
-  border: 2px solid #333 !important; 
+  border: 2px solid #333 !important;
   background-color: rgba(30, 30, 30, 0.9) !important;
   color: #ffffff !important;
-  font-size: 17px !important;
+  font-size: 16px !important;
   outline: none !important;
   box-sizing: border-box !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7) !important;
 }
 
-/* Aktiver lila Leuchteffekt beim Tippen */
 #searchInput:focus {
   border-color: #bb86fc !important;
   box-shadow: 0 0 15px rgba(187, 134, 252, 0.5) !important;
@@ -62,7 +151,9 @@ body {
   gap: 15px;
 }
 
+/* DIE KARTEN MIT RELATIVEM POSITIONIEREN FÜR DEN STERN */
 .card {
+  position: relative;
   background: rgba(30, 30, 30, 0.9);
   padding: 10px;
   border-radius: 12px;
@@ -93,4 +184,26 @@ h3 {
   border-radius: 5px;
   font-weight: bold;
   font-size: 14px;
+}
+
+/* DER ERSEHNTE FAVORITEN-STERN */
+.fav-star {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.4); /* Normal matt und unauffällig */
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease, color 0.2s ease;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.fav-star:hover {
+  transform: scale(1.2);
+}
+
+/* Wenn aktiv: wunderschön glühendes Gold-Gelb */
+.fav-star.active {
+  color: #ffca28;
 }
