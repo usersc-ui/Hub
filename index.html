@@ -9,11 +9,26 @@
 </head>
 <body>
 
+    <div class="header-bar">
+        <div class="menu-btn" id="menuToggle">
+            <span></span>
+            <span></span>
+        </div>
+        
+        <div class="dropdown-menu" id="dropdownMenu">
+            <label class="toggle-container">
+                <input type="checkbox" id="favToggle">
+                <span class="slider"></span>
+                <span class="toggle-text">Favoriten oben anzeigen</span>
+            </label>
+        </div>
+    </div>
+
     <div class="search-section">
         <input type="text" id="searchInput" placeholder="Model suchen...">
     </div>
 
-    <div class="grid"></div>
+    <div class="grid" id="container"></div>
 
 </body>
 </html>
