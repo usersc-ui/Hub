@@ -9,7 +9,7 @@ const initialData = [
     {id: "p8", name: "lexi marvel", link: "https://mega.nz/folder/bZM2VRAK#6wBv39rbrItW8YOdYMtjVQ", img: "https://i.imgur.com/XyFJ2Du.jpeg"},
     {id: "p9", name: "Comatozze", link: "https://mega.nz/folder/hywlGJDY#dDp9Q3NFv_9cDkroIRlL4Q", img: "https://i.imgur.com/XZyrg68.jpeg"},
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"},
-    {id: "p11", name: "creamyspot", link: "https://mega.nz/folder/FQtBHIoA#bMNIVyAAPrtinorDC0JeJA", img: "https://i.imgur.com/gI0CfNC.jpeg"},
+    {id: "p11", name: "creamyspot", link: "https://mega.nz/folder/FQtBHIoA#bMNIVyAAPrtlnorDC0JeJA", img: "https://i.imgur.com/gI0CfNC.jpeg"},
     {id: "p12", name: "gabbyblessings", link: "https://mega.nz/folder/uCxzFRgJ#Opwp5C5UzHMzmmtz_c2q5A", img: "https://i.imgur.com/9MafsCv.png"}
 ];
 
@@ -19,7 +19,6 @@ const historyContainer = document.getElementById('searchHistory');
 
 let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
 
-// Hilfsfunktion: Berechnet, wie ähnlich sich zwei Wörter sind (Levenshtein-Distanz)
 function getEditDistance(a, b) {
     if (a.length === 0) return b.length;
     if (b.length === 0) return a.length;
@@ -32,9 +31,9 @@ function getEditDistance(a, b) {
                 matrix[i][j] = matrix[i - 1][j - 1];
             } else {
                 matrix[i][j] = Math.min(
-                    matrix[i - 1][j - 1] + 1, // Ersetzen
-                    matrix[i][col = j - 1] + 1, // Einfügen
-                    matrix[i - 1][j] + 1 // Löschen
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
                 );
             }
         }
@@ -73,7 +72,6 @@ function renderHistory() {
     });
 }
 
-// Die neue schlaue Filter-Funktion
 function filterModels(query) {
     const cleanQuery = query.toLowerCase().trim();
     
@@ -82,26 +80,20 @@ function filterModels(query) {
         return;
     }
 
-    // Wir bewerten jedes Model danach, wie gut es zur Suche passt
     const scoredData = initialData.map(item => {
         const name = item.name.toLowerCase();
         let score = 0;
 
         if (name.includes(cleanQuery)) {
-            // Perfekter Treffer oder exakter Teil des Namens bekommt die beste Bewertung
             score = 100;
         } else {
-            // Fehlertoleranter Abgleich für Vertipper (wie "ailne" für "alina")
             const distance = getEditDistance(cleanQuery, name);
-            // Je kleiner die Distanz, desto höher der Score
             score = 100 - (distance * 15);
         }
 
         return { item, score };
     });
 
-    // Nur Models anzeigen, die eine hohe Ähnlichkeit haben (Score über 45)
-    // Und die am besten passenden Treffer nach oben sortieren
     const filtered = scoredData
         .filter(entry => entry.score > 45)
         .sort((a, b) => b.score - a.score)
