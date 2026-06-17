@@ -8,32 +8,174 @@
     <script src="script.js" defer></script>
     
     <style>
-        /* HEADER MIT DEN ZWEI STRICHEN */
+        /* HEADER - HIER FLIEGT DER QUERSTRICH RAUS */
         .header-bar {
             display: flex;
             align-items: center;
-            padding: 10px 15px;
-            background: rgba(15, 15, 15, 0.8);
-            backdrop-filter: blur(5px);
+            padding: 15px;
+            background: transparent; /* Komplett unsichtbarer Hintergrund */
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid #222;
         }
 
-        /* Der Menü-Button (Zwei Striche) */
+        /* Der Menü-Button (Jetzt in hellem Weiß sichtbar) */
         .menu-btn {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            width: 22px;
-            height: 12px; /* Perfekte Höhe für genau zwei Striche */
+            width: 24px;
+            height: 10px; /* Perfekter Abstand für zwei Striche */
             cursor: pointer;
             z-index: 110;
         }
 
         .menu-btn span {
             display: block;
+            width: 100%;
+            height: 2px;
+            background-color: #ffffff; /* Knalliges Weiß, damit man es sieht! */
+            border-radius: 2px;
+        }
+
+        /* DURCHSICHTIGE SIDEBAR MIT BLUR-EFFEKT */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 250px;
+            height: 100vh;
+            /* Leicht durchsichtiges Schwarz */
+            background: rgba(18, 18, 18, 0.75); 
+            /* Macht den Hintergrund hinter der Sidebar stylisch unscharf */
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            z-index: 105;
+            transition: left 0.3s ease;
+            padding: 70px 15px 20px 15px;
+            box-sizing: border-box;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar h2 {
+            font-size: 16px;
+            color: #bb86fc;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 5px;
+        }
+
+        /* SUCHVERLAUF BUTTONS IN DER SIDEBAR */
+        .history-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .history-tag {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .history-tag:hover {
+            border-color: #bb86fc;
+            color: #bb86fc;
+            background: rgba(187, 134, 252, 0.1);
+        }
+
+        /* SUCHFELD AUF DER HAUPTSEITE */
+        .search-section {
+            margin: 10px auto 30px auto;
+            text-align: center;
+            max-width: 400px;
+            padding: 0 15px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid #333;
+            background: rgba(30, 30, 30, 0.9);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #searchInput:focus {
+            border-color: #bb86fc;
+            box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
+        }
+
+        /* Abdunklungshintergrund */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.4);
+            z-index: 102;
+            display: none;
+        }
+        .overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <div class="menu-btn" id="menuToggle">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <h2>Suchverlauf</h2>
+        <div id="searchHistory" class="history-container"></div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="search-section">
+        <input type="text" id="searchInput" placeholder="Model suchen...">
+    </div>
+
+    <div id="container" class="grid"></div>
+
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleMenu() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+    </script>
+
+</body>
+</html>
             width: 100%;
             height: 2px;
             background-color: white;
