@@ -9,9 +9,7 @@ const initialData = [
     {id: "p8", name: "lexi marvel", link: "https://mega.nz/folder/bZM2VRAK#6wBv39rbrItW8YOdYMtjVQ", img: "https://i.imgur.com/XyFJ2Du.jpeg"},
     {id: "p9", name: "Comatozze", link: "https://mega.nz/folder/hywlGJDY#dDp9Q3NFv_9cDkroIRlL4Q", img: "https://i.imgur.com/XZyrg68.jpeg"},
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"},
-    // HIER GEÄNDERT: ID angepasst und Bild-URL mit Cache-Buster
     {id: "p11_new", name: "creamyspot", link: "https://mega.nz/folder/FQtBHIoA#bMNIVyAAPrtinorDC0JeJA", img: "https://i.imgur.com/gI0CfNC.jpeg?t=" + new Date().getTime()}
-    {id: "p_1781712517608", name: "TestModel", link: "https://mega.nz/deine-datei", img: "https://i.imgur.com/dein-bild.jpg"},
 ];
 
 const container = document.getElementById('container');
