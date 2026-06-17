@@ -2,7 +2,7 @@ const initialData = [
     {id: "p1", name: "annaplusone", link: "https://mega.nz/folder/m0Jw2DhA#Jv9qh5hRprdYVsuvXJBbkQ", img: "https://i.imgur.com/w1Iz6nB.jpeg"},
     {id: "p2", name: "cheekymz", link: "https://mega.nz/folder/WFlmiLaS#baeU7J8RoJK175BXNu7K3Q", img: "https://i.imgur.com/wuBA3bh.jpeg"},
     {id: "p3", name: "UrFavBellaBby", link: "https://mega.nz/folder/QjEGkKgY#B1xbO-2J95onN_qosU7DWw", img: "https://i.imgur.com/TYdDLj0.jpeg"},
-    {id: "p4", name: "alina_rose", link: "https://mega.nz/folder/WQlFBbgS#5Make9tPNyO6Ta7htdd4yfg", img: "https://i.imgur.com/6aEoOaa.jpeg"},
+    {id: "p4", name: "alina_rose", link: "https://mega.nz/folder/WQlFBbgS#5Mak9tPNyO6Ta7htdd4yfg", img: "https://i.imgur.com/6aEoOaa.jpeg"},
     {id: "p5", name: "brattygappy", link: "https://mega.nz/folder/g7kgWT7Y#ICDXShb9sBrjbggO8fF3JQ", img: "https://i.imgur.com/MwkX4qc.jpeg"},
     {id: "p6", name: "aaliyah yasin", link: "https://mega.nz/folder/xUFARK7B#mCvpc18rJYr171vOA9TKvg", img: "https://i.imgur.com/blV0wEK.jpeg"},
     {id: "p7", name: "annywalker", link: "https://mega.nz/folder/q9A1VQLQ#7MHvNUDfDEgkEB_CARrEJQ", img: "https://i.imgur.com/KG9wrc2.jpeg"},
@@ -19,6 +19,29 @@ const historyContainer = document.getElementById('searchHistory');
 
 let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
 
+// Hilfsfunktion: Berechnet, wie ähnlich sich zwei Wörter sind (Levenshtein-Distanz)
+function getEditDistance(a, b) {
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1, // Ersetzen
+                    matrix[i][col = j - 1] + 1, // Einfügen
+                    matrix[i - 1][j] + 1 // Löschen
+                );
+            }
+        }
+    }
+    return matrix[b.length][a.length];
+}
+
 function renderCards(data) {
     if (!container) return;
     container.innerHTML = '';
@@ -34,6 +57,76 @@ function renderCards(data) {
     });
 }
 
+function renderHistory() {
+    if (!historyContainer) return;
+    historyContainer.innerHTML = '';
+    
+    searchHistory.slice(-5).reverse().forEach(term => {
+        const tag = document.createElement('span');
+        tag.className = 'history-tag';
+        tag.textContent = term;
+        tag.addEventListener('click', () => {
+            searchInput.value = term;
+            filterModels(term);
+        });
+        historyContainer.appendChild(tag);
+    });
+}
+
+// Die neue schlaue Filter-Funktion
+function filterModels(query) {
+    const cleanQuery = query.toLowerCase().trim();
+    
+    if (cleanQuery === '') {
+        renderCards(initialData);
+        return;
+    }
+
+    // Wir bewerten jedes Model danach, wie gut es zur Suche passt
+    const scoredData = initialData.map(item => {
+        const name = item.name.toLowerCase();
+        let score = 0;
+
+        if (name.includes(cleanQuery)) {
+            // Perfekter Treffer oder exakter Teil des Namens bekommt die beste Bewertung
+            score = 100;
+        } else {
+            // Fehlertoleranter Abgleich für Vertipper (wie "ailne" für "alina")
+            const distance = getEditDistance(cleanQuery, name);
+            // Je kleiner die Distanz, desto höher der Score
+            score = 100 - (distance * 15);
+        }
+
+        return { item, score };
+    });
+
+    // Nur Models anzeigen, die eine hohe Ähnlichkeit haben (Score über 45)
+    // Und die am besten passenden Treffer nach oben sortieren
+    const filtered = scoredData
+        .filter(entry => entry.score > 45)
+        .sort((a, b) => b.score - a.score)
+        .map(entry => entry.item);
+
+    renderCards(filtered);
+}
+
+searchInput.addEventListener('input', (e) => {
+    filterModels(e.target.value);
+});
+
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        const value = searchInput.value.trim();
+        if (value && !searchHistory.includes(value)) {
+            searchHistory.push(value);
+            localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            renderHistory();
+        }
+    }
+});
+
+renderCards(initialData);
+renderHistory();
 function renderHistory() {
     if (!historyContainer) return;
     historyContainer.innerHTML = '';
