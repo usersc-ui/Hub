@@ -17,7 +17,7 @@ body {
 
 /* SUCHBEREICH (Farbe exakt wie die Karten) */
 .search-section {
-  margin: 30px auto 40px auto;
+  margin: 20px auto 30px auto;
   text-align: center;
   max-width: 400px;
   padding: 0 15px;
@@ -42,7 +42,7 @@ body {
   box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
 }
 
-/* VERLAUF BUTTONS DIREKT DARUNTER */
+/* VERLAUF BUTTONS */
 .history-container {
   margin-top: 15px;
   display: flex;
@@ -68,8 +68,8 @@ body {
   border-color: #bb86fc;
 }
 
-/* GRID & KARTEN */
-.grid {
+/* DEIN ORIGINALES KARTEN-DESIGN */
+.container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 15px;
