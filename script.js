@@ -11,7 +11,6 @@ const initialData = [
     {id: "p10", name: "ambergianna", link: "https://mega.nz/folder/OFljlCQa#Euxx9eB5S5uhDDPOCjNEOw", img: "https://i.imgur.com/7goIJ8U.jpeg"},
     {id: "p11", name: "creamyspot", link: "https://mega.nz/folder/FQtBHIoA#bMNIVyAAPrtinorDC0JeJA", img: "https://i.postimg.cc/h4LRsFvv/creamyspot.jpg"}
 ];
-
 const container = document.getElementById('container');
 container.innerHTML = ''; // Vorher leeren
 
