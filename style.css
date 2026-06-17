@@ -15,74 +15,9 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* HEADER MIT DEN ZWEI STRICHEN */
-.header-bar {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  background: transparent;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.menu-btn {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 24px;
-  height: 10px;
-  cursor: pointer;
-  z-index: 110;
-}
-
-.menu-btn span {
-  display: block;
-  width: 100%;
-  height: 2px;
-  background-color: #ffffff;
-  border-radius: 2px;
-}
-
-/* SIDEBAR & OVERLAY */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -280px;
-  width: 250px;
-  height: 100vh;
-  background: rgba(18, 18, 18, 0.75); 
-  backdrop-filter: blur(10px); 
-  -webkit-backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-  z-index: 105;
-  transition: left 0.3s ease;
-  padding-top: 60px;
-  box-sizing: border-box;
-}
-
-.sidebar.active {
-  left: 0;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.4);
-  z-index: 102;
-  display: none;
-}
-.overlay.active {
-  display: block;
-}
-
-/* SUCHBEREICH */
+/* SUCHBEREICH (Farbe exakt wie die Karten) */
 .search-section {
-  margin: 10px auto 30px auto;
+  margin: 30px auto 40px auto;
   text-align: center;
   max-width: 400px;
   padding: 0 15px;
@@ -107,6 +42,7 @@ body {
   box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
 }
 
+/* VERLAUF BUTTONS DIREKT DARUNTER */
 .history-container {
   margin-top: 15px;
   display: flex;
