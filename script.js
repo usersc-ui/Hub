@@ -19,39 +19,33 @@ const menuToggle = document.getElementById('menuToggle');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const favToggle = document.getElementById('favToggle');
 
-// Speicher für Favoriten-IDs aus dem Browser laden
 let favorites = JSON.parse(localStorage.getItem('modelFavorites')) || [];
-// Zustand des Toggles laden
 let showFavsOnTop = JSON.parse(localStorage.getItem('showFavsOnTop')) || false;
 
-// Setze den Schalter beim Start auf den gespeicherten Wert
 if (favToggle) {
     favToggle.checked = showFavsOnTop;
 }
 
-// 2-Striche-Menü öffnen/schließen beim Drücken
 if (menuToggle && dropdownMenu) {
     menuToggle.addEventListener('click', (e) => {
         e.stopPropagation();
         dropdownMenu.classList.toggle('show');
     });
 
-    // Schließen, wenn man irgendwo anders hinklickt
     document.addEventListener('click', () => {
         dropdownMenu.classList.remove('show');
     });
     
     dropdownMenu.addEventListener('click', (e) => {
-        e.stopPropagation(); // Verhindert Schließen beim Klicken im Menü
+        e.stopPropagation();
     });
 }
 
-// Wenn man den Toggle umschaltet
 if (favToggle) {
     favToggle.addEventListener('change', (e) => {
         showFavsOnTop = e.target.checked;
         localStorage.setItem('showFavsOnTop', JSON.stringify(showFavsOnTop));
-        applyFilterAndSort(); // Liste sofort neu ordnen!
+        applyFilterAndSort();
     });
 }
 
@@ -84,7 +78,7 @@ function toggleFavorite(id) {
         favorites.push(id);
     }
     localStorage.setItem('modelFavorites', JSON.stringify(favorites));
-    applyFilterAndSort(); // Karten aktualisieren
+    applyFilterAndSort();
 }
 
 function renderCards(data) {
@@ -102,10 +96,10 @@ function renderCards(data) {
             <a href="${item.link}" target="_blank" class="btn">Öffnen</a>
         `;
         
-        // Stern-Klick-Event verknüpfen
         const star = card.querySelector('.fav-star');
         star.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             toggleFavorite(item.id);
         });
         
@@ -117,7 +111,6 @@ function applyFilterAndSort() {
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
     let currentList = [...initialData];
 
-    // 1. Falls gesucht wird, filtern
     if (query !== '') {
         const scoredData = initialData.map(item => {
             const name = item.name.toLowerCase();
@@ -137,12 +130,11 @@ function applyFilterAndSort() {
             .map(entry => entry.item);
     }
 
-    // 2. Falls der Favoriten-Toggle aktiv ist, Favoriten ganz nach oben sortieren
     if (showFavsOnTop) {
         currentList.sort((a, b) => {
             const aIsFav = favorites.includes(a.id) ? 1 : 0;
             const bIsFav = favorites.includes(b.id) ? 1 : 0;
-            return bIsFav - aIsFav; // Favoriten (1) kommen vor Nicht-Favoriten (0)
+            return bIsFav - aIsFav;
         });
     }
 
@@ -153,5 +145,4 @@ if (searchInput) {
     searchInput.addEventListener('input', applyFilterAndSort);
 }
 
-// Erstmaliger Start beim Laden der Seite
 applyFilterAndSort();
