@@ -13,12 +13,18 @@ const initialData = [
     {id: "p12", name: "gabbyblessings", link: "https://mega.nz/folder/uCxzFRgJ#Opwp5C5UzHMzmmtz_c2q5A", img: "https://i.imgur.com/9MafsCv.png"}
 ];
 
-// Ab hier werden die Karten auf der Seite erstellt
 const container = document.querySelector('.grid') || document.getElementById('container');
+const searchInput = document.getElementById('searchInput');
+const historyContainer = document.getElementById('searchHistory');
 
-if (container) {
+// Lade Verlauf aus dem Browser-Speicher oder starte leer
+let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+// Funktion zum Anzeigen der Karten
+function renderCards(data) {
+    if (!container) return;
     container.innerHTML = '';
-    initialData.forEach(item => {
+    data.forEach(item => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
@@ -29,3 +35,51 @@ if (container) {
         container.appendChild(card);
     });
 }
+
+// Funktion zum Anzeigen des Suchverlaufs
+function renderHistory() {
+    if (!historyContainer) return;
+    historyContainer.innerHTML = '';
+    
+    // Zeige die letzten 5 Suchbegriffe als kleine Buttons an
+    searchHistory.slice(-5).reverse().forEach(term => {
+        const tag = document.createElement('span');
+        tag.className = 'history-tag';
+        tag.textContent = term;
+        // Bei Klick auf das Tag wird sofort danach gesucht
+        tag.addEventListener('click', () => {
+            searchInput.value = term;
+            filterModels(term);
+        });
+        historyContainer.appendChild(tag);
+    });
+}
+
+// Funktion zum Filtern der Models
+function filterModels(query) {
+    const filtered = initialData.filter(item => 
+        item.name.toLowerCase().includes(query.toLowerCase())
+    );
+    renderCards(filtered);
+}
+
+// Event-Listener für das Tippen in der Suchleiste
+searchInput.addEventListener('input', (e) => {
+    filterModels(e.target.value);
+});
+
+// Event-Listener für "Enter" -> Speichert den Begriff im Verlauf
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        const value = searchInput.value.trim();
+        if (value && !searchHistory.includes(value)) {
+            searchHistory.push(value);
+            localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            renderHistory();
+        }
+    }
+});
+
+// Beim ersten Start der Seite alles laden
+renderCards(initialData);
+renderHistory();
