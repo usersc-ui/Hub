@@ -13,7 +13,7 @@ const initialData = [
     {id: "p12", name: "gabbyblessings", link: "https://mega.nz/folder/uCxzFRgJ#Opwp5C5UzHMzmmtz_c2q5A", img: "https://i.imgur.com/9MafsCv.png"}
 ];
 
-const container = document.querySelector('.grid') || document.getElementById('container');
+const container = document.getElementById('container');
 const searchInput = document.getElementById('searchInput');
 const historyContainer = document.getElementById('searchHistory');
 
@@ -119,6 +119,6 @@ if (searchInput) {
     });
 }
 
-// Sofort beim Laden starten
+// Start-Trigger beim Aufrufen der Seite
 renderCards(initialData);
 renderHistory();
