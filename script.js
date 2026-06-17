@@ -13,7 +13,7 @@ const initialData = [
     {id: "p12", name: "gabbyblessings", link: "https://mega.nz/folder/uCxzFRgJ#Opwp5C5UzHMzmmtz_c2q5A", img: "https://i.imgur.com/9MafsCv.png"}
 ];
 
-const container = document.querySelector('.grid') || document.getElementById('container');
+const container = document.querySelector('.grid');
 const searchInput = document.getElementById('searchInput');
 
 function getEditDistance(a, b) {
@@ -89,5 +89,4 @@ if (searchInput) {
     });
 }
 
-// Karten direkt beim Start erzwingen
 renderCards(initialData);
